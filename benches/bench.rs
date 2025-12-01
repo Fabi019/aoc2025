@@ -5,7 +5,7 @@ use criterion::{criterion_group, criterion_main};
 // where <name> can be like: day07, 07, 07/1, 7/2
 
 aoc2025::benchs!(
-    
+    day01
 );
 
 criterion_main!(benchmarks);
