@@ -1,41 +1,36 @@
 aoc2025::main!("../../assets/day01.txt");
 
 fn part1(input: &str) -> u32 {
-    let lines = input.lines();
+    let amounts = input.lines().map(|l| {
+        let dist: i32 = l[1..].parse().unwrap();
+        dist * if &l[0..1] == "L" { -1 } else { 1 }
+    });
 
-    let mut start = 50;
-    let mut zeros = 0;
+    amounts
+        .fold((50, 0), |(mut current, zeros), amount| {
+            current += amount;
+            current %= 100;
 
-    for line in lines {
-        let dist: i32 = line[1..].parse().unwrap();
-        let dir = if &line[0..1] == "L" { -1 } else { 1 };
+            if current < 0 {
+                current += 100;
+            }
 
-        start += dist * dir;
-        start %= 100;
-
-        if start < 0 {
-            start += 100;
-        }
-
-        if start == 0 {
-            zeros += 1;
-        }
-    }
-    zeros
+            (current, if current == 0 { zeros + 1 } else { zeros })
+        })
+        .1
 }
 
-fn part2(input: &str) -> u32 {
-    let lines = input.lines();
+fn part2(input: &str) -> i32 {
+    let amounts = input.lines().map(|l| {
+        let dist: i32 = l[1..].parse().unwrap();
+        dist * if &l[0..1] == "L" { -1 } else { 1 }
+    });
 
     let mut start = 50;
     let mut zeros = 0;
 
-    for line in lines {
-        let dist: i32 = line[1..].parse().unwrap();
-        let dir = if &line[0..1] == "L" { -1 } else { 1 };
-
+    for amount in amounts {
         let was_zero = start == 0;
-        let amount = dist * dir;
         start += amount;
 
         if start == 0 {
@@ -54,10 +49,8 @@ fn part2(input: &str) -> u32 {
                 zeros += 1;
             }
         } else {
-            while start >= 100 {
-                start -= 100;
-                zeros += 1;
-            }
+            zeros += start / 100;
+            start %= 100;
         }
     }
     zeros
