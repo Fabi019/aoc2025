@@ -10,7 +10,5 @@ fn part2(input: &str) -> u32 {
 
 aoc2025::test!(
     "\
-",
-    0,
-    0
+", 0, 0
 );

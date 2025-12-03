@@ -7,10 +7,9 @@ fn part1(input: &str) -> u64 {
     });
 
     ranges.fold(0, |mut acc, (start, end)| {
-        'nextNumer:
-        for num in start..=end {
+        'nextNumer: for num in start..=end {
             let s = num.to_string();
-            if s[0..s.len()/2] != s[s.len()/2..] {
+            if s.len() % 2 != 0 || s[0..s.len() / 2] != s[s.len() / 2..] {
                 continue 'nextNumer;
             }
             acc += num;
@@ -26,13 +25,15 @@ fn part2(input: &str) -> u64 {
     });
 
     ranges.fold(0, |mut acc, (start, end)| {
-        'nextNumer:
-        for num in start..=end {
+        'nextNumer: for num in start..=end {
             let s = num.to_string();
             'nextPattern: for pat_len in 1..=s.len() / 2 {
                 let pattern = &s[0..pat_len];
+                if s.len() % pat_len != 0 {
+                    continue 'nextPattern;
+                }
                 for i in (pat_len..s.len()).step_by(pat_len) {
-                    if i + pat_len > s.len() || &s[i..i + pat_len] != pattern {
+                    if &s[i..i + pat_len] != pattern {
                         continue 'nextPattern;
                     }
                 }
