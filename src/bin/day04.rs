@@ -23,8 +23,7 @@ fn part1(input: &str) -> u32 {
 
     for y in 0..grid.len() {
         for x in 0..grid[0].len() {
-            let c = grid[y][x];
-            if c != '@' {
+            if grid[y][x] != '@' {
                 continue;
             }
 
@@ -39,6 +38,10 @@ fn part1(input: &str) -> u32 {
 
                 if grid[ny as usize][nx as usize] == '@' {
                     rolls += 1;
+                }
+
+                if rolls >= 4 {
+                    break;
                 }
             }
 
@@ -60,11 +63,10 @@ fn part2(input: &str) -> u32 {
     let mut removed = HashSet::new();
 
     loop {
-        let mut positions = HashSet::new();
+        let mut to_remove = Vec::new();
         for y in 0..grid.len() {
             for x in 0..grid[0].len() {
-                let c = grid[y][x];
-                if c != '@' || removed.contains(&(x, y)) {
+                if grid[y][x] != '@' || removed.contains(&(x, y)) {
                     continue;
                 }
 
@@ -83,21 +85,23 @@ fn part2(input: &str) -> u32 {
                     {
                         rolls += 1;
                     }
+                    
+                    if rolls >= 4 {
+                        break;
+                    }
                 }
 
                 if rolls < 4 {
-                    positions.insert((x, y));
+                    to_remove.push((x, y));
                 }
             }
         }
 
-        if positions.is_empty() {
+        if to_remove.is_empty() {
             break;
         }
 
-        for pos in positions {
-            removed.insert(pos);
-        }
+        removed.extend(to_remove);
     }
 
     removed.len() as u32
