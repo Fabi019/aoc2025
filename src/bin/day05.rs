@@ -33,26 +33,24 @@ fn part2(input: &str) -> u64 {
         })
         .collect::<Vec<_>>();
 
-    ranges.sort_by_key(|&(start, _)| start);
+    ranges.sort_unstable_by_key(|&(start, _)| start);
 
-    let mut merged: Vec<(u64, u64)> = Vec::new();
-    for &(start, end) in &ranges {
-        // When the start of the current range falls into the previous range, merge them
+    let mut merged: Vec<(u64, u64)> = Vec::with_capacity(ranges.len());
+    for r @ (start, end) in ranges {
+        // When the start of the current range falls into the previous range
+        // extend previous range to also include current range
         if let Some(prev) = merged.last_mut()
             && start <= prev.1 + 1
         {
             prev.1 = prev.1.max(end);
             continue;
         }
-        merged.push((start, end));
+        merged.push(r);
     }
 
-    let mut total = 0;
-    for &(start, end) in &merged {
-        println!("{}-{}", start, end);
-        total += end - start + 1;
-    }
-    total
+    merged
+        .iter()
+        .fold(0, |acc, (start, end)| acc + end - start + 1)
 }
 
 aoc2025::test!(

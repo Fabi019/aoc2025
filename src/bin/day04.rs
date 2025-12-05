@@ -85,7 +85,7 @@ fn part2(input: &str) -> u32 {
                     {
                         rolls += 1;
                     }
-                    
+
                     if rolls >= 4 {
                         break;
                     }
