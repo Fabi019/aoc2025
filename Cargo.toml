@@ -8,7 +8,7 @@ criterion = "0.5"
 
 [profile.release]
 debug = true
-lto = "fat"
+lto = "thin"
 panic = "abort"
 
 [[bench]]
@@ -17,4 +17,13 @@ harness = false
 
 [dependencies]
 mimalloc = { version = "*", default-features = false }
-regex = "1.11.1"
+good_lp = { version = "*", features = ["scip", "scip_bundled"], default-features = false, optional = true }
+regex = { version = "*", optional = true }
+
+[features]
+lp = ["good_lp"]
+reg = ["regex"]
+
+[[bin]]
+name = "day10"
+required-features = ["lp"]
